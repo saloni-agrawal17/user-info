@@ -11,5 +11,7 @@ public interface UserService {
 	public void deleteUser(int id);
 	
 	public List<Object> getDepartmentCount();
+
+	public List<UserInfo> getFilterData(UserInfo userInfo);
 	
 }

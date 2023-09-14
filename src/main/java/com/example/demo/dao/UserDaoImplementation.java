@@ -3,6 +3,7 @@ package com.example.demo.dao;
 
 import java.util.List;
 
+import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.json.JSONObject;
 import org.springframework.stereotype.Repository;
@@ -54,6 +55,71 @@ public class UserDaoImplementation implements UserDao{
 			
 		return result;
 	}
+
+	@Override
+	public List<UserInfo> getFilterData(UserInfo userInfo) {
+		
+		Session currentSession = entityManager.unwrap(Session.class);
+		
+		String query = "FROM UserInfo u WHERE ";
+		boolean isSingleWhereConditionPresent = false;
+		
+		if(userInfo.getFirstName() != null && !userInfo.getFirstName().equals("")) {
+			query += "u.firstName = "+userInfo.getFirstName();
+			
+			isSingleWhereConditionPresent = true;
+		}
+		if(userInfo.getLastName() != null && !userInfo.getLastName().equals("")) {
+			
+			if(isSingleWhereConditionPresent) {
+				query+=" AND ";
+			}
+			query += "u.lastName = "+userInfo.getLastName();
+			
+			isSingleWhereConditionPresent = true;
+		}
+		if(userInfo.getCity() != null && !userInfo.getCity().equals("")) {
+			if(isSingleWhereConditionPresent) {
+				query+=" AND ";
+			}
+			
+			query += "u.city = "+userInfo.getCity();
+			
+			isSingleWhereConditionPresent = true;
+		}
+		if(userInfo.getDepartment() != null && !userInfo.getDepartment().equals("")) {
+			if(isSingleWhereConditionPresent) {
+				query+=" AND ";
+			}
+			
+			query += "u.department = "+userInfo.getDepartment();
+			
+			isSingleWhereConditionPresent = true;
+		}
+		if(userInfo.getBankCurrency() != null && !userInfo.getBankCurrency().equals("")) {
+			if(isSingleWhereConditionPresent) {
+				query+=" AND ";
+			}
+			
+			query += "u.bankCurrency = "+userInfo.getBankCurrency();
+			
+			isSingleWhereConditionPresent = true;
+		}
+		if(userInfo.getHeight() != 0f) {
+			if(isSingleWhereConditionPresent) {
+				query+=" AND ";
+			}
+			
+			query += "u.height = "+userInfo.getHeight();
+			
+			isSingleWhereConditionPresent = true;
+		}
+		
+		List<UserInfo> result = currentSession.createQuery(query, UserInfo.class).list();
+		
+		return result;
+	}
 	
 	
 }
+	

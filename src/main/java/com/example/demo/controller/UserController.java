@@ -134,7 +134,13 @@ public class UserController {
         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
 	}
 	
-	
+	@GetMapping("/filter-data")
+	public List<UserInfo> getFilterData(UserInfo userInfo) {
+		
+		List<UserInfo> userInfoList = userService.getFilterData(userInfo);
+		
+        return userInfoList;
+	}
 	
 	
 }

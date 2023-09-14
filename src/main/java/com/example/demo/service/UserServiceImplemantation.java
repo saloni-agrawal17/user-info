@@ -42,4 +42,11 @@ public class UserServiceImplemantation implements UserService{
 		
 	}
 
+	@Override
+	@Transactional
+	public List<UserInfo> getFilterData(UserInfo userInfo) {
+
+		return userDao.getFilterData(userInfo);
+	}
+
 }
