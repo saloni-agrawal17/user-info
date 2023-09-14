@@ -108,20 +108,27 @@ public class UserController {
 	@GetMapping("/get-department-count")
 	public ResponseEntity<Object> getDepartmentCount() {
 		
-		List<Object> object = userService.getDepartmentCount();
+		List<Object> departmentCountList = userService.getDepartmentCount();
 		
 		Map<String,Integer> result = new HashMap<String, Integer>();
-				
-		for(int i = 0;i<object.size();i++) {
+		
+		if(departmentCountList != null) {
+			
+			for(int i = 0;i<departmentCountList.size();i++) {
 
-			Map map = new HashMap<String,Integer>(); 
-			Object []obj = (Object[])object.get(i); 
-			 
-			String department = obj[0].toString();
-			String count = obj[1].toString();
-			  
-			result.put(department,Integer.parseInt(count)); 
-			  
+				Map map = new HashMap<String,Integer>(); 
+				Object []object = (Object[])departmentCountList.get(i); 
+				
+				if(object.length >= 2) {
+					
+					String department = object[0] != null ? object[0].toString() : "";
+					int count = object[1] != null&& object[1].toString().equals("") ? Integer.parseInt(object[1].toString()) : -1;
+					
+					if(!department.equals("") && count != -1) {
+						result.put(department,count); 						
+					}
+				}  
+			}
 		}
 		
         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);

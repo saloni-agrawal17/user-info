@@ -50,9 +50,9 @@ public class UserDaoImplementation implements UserDao{
 		
 		Query query = currentSession.createQuery("select e.department department,count(e.department) count from UserInfo e group by e.department");
 		
-		List<Object> object = query.getResultList();
+		List<Object> result = query.getResultList();
 			
-		return object;
+		return result;
 	}
 	
 	
