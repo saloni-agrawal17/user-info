@@ -12,4 +12,4 @@ CREATE TABLE `user_info` (
   `city` varchar(80) NOT NULL,
   `bank_currency` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
