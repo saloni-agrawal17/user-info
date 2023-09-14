@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.StaleObjectStateException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,8 @@ import com.example.demo.entitybean.UserInfo;
 import com.example.demo.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -68,25 +73,24 @@ public class UserController {
 	}
 	
 	@PostMapping("/add-user")
-	public UserInfo saveUser(@RequestBody UserInfo user) {
+	public UserInfo saveUser(@Valid @RequestBody UserInfo user) {
 		
 		user.setId(0);
-		
+			
 		userService.saveUser(user);
 		
 		return user;
 		
 	}
 	
-	@PutMapping("/add-user")
-	public UserInfo editUser(@RequestBody UserInfo user) throws UserNotFoundException {
-		try { 
-			userService.saveUser(user);
-		}catch (Exception e) {
-			throw new UserNotFoundException("User with id "+user.getId()+" not found");
+	@PutMapping("/update-user")
+	public UserInfo editUser(@Valid @RequestBody UserInfo user) throws UserNotFoundException{
+		
+		try {
+			userService.saveUser(user); 
+		}catch(Exception e) {
+			throw new UserNotFoundException("User with id "+user.getId()+" not found");			
 		}
-		
-		
 		return user;
 	}
 	
@@ -102,40 +106,28 @@ public class UserController {
 	}
 	
 	@GetMapping("/get-department-count")
-	public String getDepartmentCount() {
+	public ResponseEntity<Object> getDepartmentCount() {
 		
 		List<Object> object = userService.getDepartmentCount();
 		
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = null;
-		
+		Map<String,Integer> result = new HashMap<String, Integer>();
+				
 		for(int i = 0;i<object.size();i++) {
-			
-			jsonObject = new JSONObject();
-			
-			 Object []obj = (Object[])object.get(i); 
+
+			Map map = new HashMap<String,Integer>(); 
+			Object []obj = (Object[])object.get(i); 
 			 
-			 String department = obj[0].toString();
-			 String count = obj[1].toString();
+			String department = obj[0].toString();
+			String count = obj[1].toString();
 			  
-			 jsonObject.put("department", department); 
-			 jsonObject.put("count", count);
+			result.put(department,Integer.parseInt(count)); 
 			  
-			 jsonArray.put(jsonObject);
 		}
 		
-		return jsonArray.toString();
+        return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
 	}
 	
 	
-	@ExceptionHandler
-	public ResponseEntity<UserErrorResponse> handleException(Exception e){
-		
-		UserErrorResponse userErrorResponse = new UserErrorResponse();
-		userErrorResponse.setMessage(e.getMessage());
-		
-		return new ResponseEntity<UserErrorResponse>(userErrorResponse,HttpStatus.NOT_FOUND);
-		
-	}
+	
 	
 }

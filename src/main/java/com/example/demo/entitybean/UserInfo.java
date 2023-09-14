@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="user_info")
@@ -17,6 +18,7 @@ public class UserInfo {
 	private int id;
 	
 	@Column(name="first_name")
+	@NotBlank(message = "First Name is required.")
 	private String firstName;
 	
 	@Column(name="last_name")
@@ -26,9 +28,11 @@ public class UserInfo {
 	private float height;
 	
 	@Column(name="department")
+	@NotBlank(message = "Departmnet is required.")
 	private String department;
 	
 	@Column(name="city")
+	@NotBlank(message = "City is required.")
 	private String city;
 	
 	@Column(name="bank_currency")
